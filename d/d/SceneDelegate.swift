@@ -13,33 +13,26 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-    
-
-//        let view01 = UIViewController()
-//        view01.view.backgroundColor = .white
-//        let view02 = UIViewController()
-//        view01.view.backgroundColor = .black
-//        let view03 = UIViewController()
-//        view01.view.backgroundColor = .blue
-//        
-//        // 현재 윈도우의 루트 뷰를 tab bar controller로 지정
-//        self.window?.rootViewController = tbc
-    
-
-//        // 탭바컨트롤러에 컨텐츠 컨트롤러 뷰 추가
-//        tbc.setViewControllers([view01, view02, view03], animated: false)
-//        
-//        view01.tabBarItem = UITabBarItem(title: "", image: UIImage(named: "img.png"), tag: 0)
-//        view02.tabBarItem = UITabBarItem(title: "", image: UIImage(named: "profile"), tag: 1)
-//        view03.tabBarItem = UITabBarItem(title: "", image: UIImage(named: "img.png"), tag: 2)
-//                        
-//        tbc.tabBar.backgroundColor = .yellow
-        
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
+
+        // Guard 문을 사용하여 UIWindowScene 객체를 안전하게 언래핑합니다.
         guard let _ = (scene as? UIWindowScene) else { return }
+//
+//        // 메인 뷰 컨트롤러 인스턴스를 생성합니다.
+//        let mainViewController = MainViewController()
+//
+//        // 메인 뷰 컨트롤러를 UINavigationController에 내장시킵니다.
+//        let navigationController = UINavigationController(rootViewController: mainViewController)
+//
+//        // UIWindow 객체를 생성하고, rootViewController로 navigationController를 설정합니다.
+//        let window = UIWindow(windowScene: windowScene)
+//        window.rootViewController = navigationController  // rootViewController 설정
+//        self.window = window
+//        window.makeKeyAndVisible()  // 윈도우를 키 윈도우로 설정하고 화면에 표시합니다.
     }
+
 
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.

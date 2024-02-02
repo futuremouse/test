@@ -18,7 +18,7 @@ class MainViewController: UIViewController, UIViewControllerTransitioningDelegat
     
     private lazy var todolistButton: UIButton = {
         var config = UIButton.Configuration.filled()
-        config.title = "todolist".uppercased()
+        config.title = "TODOLIST"
         config.baseBackgroundColor = .blue
         config.baseForegroundColor = .white
         config.buttonSize = .medium
@@ -33,7 +33,7 @@ class MainViewController: UIViewController, UIViewControllerTransitioningDelegat
     
     private lazy var catButton: UIButton = {
         var config = UIButton.Configuration.filled()
-        config.title = "cat".uppercased()
+        config.title = "CAT"
         config.baseBackgroundColor = .green
         config.baseForegroundColor = .white
         config.buttonSize = .medium
@@ -44,7 +44,6 @@ class MainViewController: UIViewController, UIViewControllerTransitioningDelegat
         if let catImage = UIImage(named: "CatImage") {
             btn.setImage(catImage, for: .normal)
         }
-        // Set up action for the button
         btn.addTarget(self, action: #selector(didTabCat), for: .touchUpInside)
         
         return btn
@@ -52,7 +51,7 @@ class MainViewController: UIViewController, UIViewControllerTransitioningDelegat
     
     private lazy var profileButton: UIButton = {
         var config = UIButton.Configuration.filled()
-        config.title = "ProfileDesignViewController".uppercased()
+        config.title = "ProfileDesignViewController"
         config.baseBackgroundColor = .blue
         config.baseForegroundColor = .white
         config.buttonSize = .medium
@@ -65,20 +64,23 @@ class MainViewController: UIViewController, UIViewControllerTransitioningDelegat
         return btn
     }()
     
+    private lazy var RandomVideoButton: UIButton = {
+        var config = UIButton.Configuration.filled()
+        config.title = "RandomVideoViewController"
+        config.baseBackgroundColor = .blue
+        config.baseForegroundColor = .white
+        config.buttonSize = .medium
+        config.cornerStyle = .medium
+        
+        let btn = UIButton(configuration: config)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.addTarget(self, action: #selector(didTabRandom), for: .touchUpInside)
+        
+        return btn
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        setup()
-        setupConstraints()
-        
-        // navigationController에 MainViewController를 내장시킴
-        let navigationController = UINavigationController(rootViewController: self)
-        navigationController.modalPresentationStyle = .fullScreen
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-            windowScene.windows.first?.rootViewController = navigationController
-        }
-        
-        
-        
         guard let url = URL(string: "https://spartacodingclub.kr/css/images/scc-og.jpg") else { return }
         
         let task = URLSession.shared.dataTask(with: url) { [weak self] (data, response, error) in
@@ -100,19 +102,28 @@ class MainViewController: UIViewController, UIViewControllerTransitioningDelegat
         }
         
         task.resume()
+        setupView()
+        setupConstraints()
     }
-    
-    func setup() {
-        self.view.backgroundColor = .white
-        self.view.addSubview(myImage)
-        self.view.addSubview(todolistButton)
-        self.view.addSubview(catButton)
-        self.view.addSubview(profileButton)
+        
+        // navigationController에 MainViewController를 내장시킴
+//        let navigationController = UINavigationController(rootViewController: self)
+//        navigationController.modalPresentationStyle = .fullScreen
+//        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+//            windowScene.windows.first?.rootViewController = navigationController
+//        }
+
+    private func setupView() {
+  
+        view.backgroundColor = .systemBackground
+        
+        [myImage, todolistButton, catButton, profileButton, RandomVideoButton].forEach { subViewToAdd in
+            view.addSubview(subViewToAdd)
+        }
+        
     }
     
     func setupConstraints() {
-        
-        let verticalSpacing: CGFloat = 85 // Adjust the value as needed
         
         NSLayoutConstraint.activate([
             myImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -127,43 +138,69 @@ class MainViewController: UIViewController, UIViewControllerTransitioningDelegat
         ])
         
         NSLayoutConstraint.activate([
-            catButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            catButton.topAnchor.constraint(equalTo: todolistButton.bottomAnchor, constant: verticalSpacing),
+            catButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            catButton.topAnchor.constraint(equalTo: todolistButton.bottomAnchor, constant: 45),
         ])
         
         NSLayoutConstraint.activate([
             profileButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            profileButton.topAnchor.constraint(equalTo: catButton.bottomAnchor, constant: verticalSpacing),
+            profileButton.topAnchor.constraint(equalTo: catButton.bottomAnchor, constant: 45),
         ])
         
+        NSLayoutConstraint.activate([
+            RandomVideoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            RandomVideoButton.topAnchor.constraint(equalTo: profileButton.bottomAnchor, constant: 45),
+        ])
         
     }
     
     @objc
     func didTabTodolist() {
+        
+//        let vc = TodoListViewController()
+//        vc.modalPresentationStyle = .fullScreen
+//        present(vc, animated: true)
+        
         let todoListVC = TodoListViewController()
         let navigationController = UINavigationController(rootViewController: todoListVC)
         navigationController.modalPresentationStyle = .fullScreen
         present(navigationController, animated: true, completion: nil)
     }
 
-
+//    @objc
+//    func didTabCat() {
+//        let petVC = PetViewController()
+//        petVC.modalPresentationStyle = .fullScreen
+//        present(petVC, animated: true, completion: nil)
+        
+//        let petVC = PetViewController()
+//        let navigationController = UINavigationController(rootViewController: petVC)
+//        navigationController.modalPresentationStyle = .fullScreen
+//        present(navigationController, animated: true, completion: nil)
+//
+//    }
     
-    
-    @objc
-    func didTabCat() {
-        //        let petVC = PetViewController()
-        //        present(petVC, animated: true, completion: nil)
+    @objc func didTabCat() {
+        let petVC = PetViewController()
+        if let navigationController = self.navigationController {
+            navigationController.pushViewController(petVC, animated: true)
+        } else {
+            print("네비게이션 컨트롤러가 없음")
+        }
     }
+
     @objc
     func didTabProfile() {
         showProfilePage(segueIdentifier: "showProfileDesign")
     }
+    
+    @objc
+    func didTabRandom() {
+        let randomVideoVC = RandomVideoViewController()
+        present(randomVideoVC, animated: true, completion: nil)
+    }
     // MARK: - Navigation
     func showProfilePage(segueIdentifier: String) {
-        performSegue(withIdentifier: segueIdentifier, sender: nil)
-    }
-    func showTodoPage(segueIdentifier: String) {
         performSegue(withIdentifier: segueIdentifier, sender: nil)
     }
     
